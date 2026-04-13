@@ -1,0 +1,11 @@
+[project]
+name = "brain-mcp"
+version = "0.1.0"
+description = "Brain MCP server and CLI"
+requires-python = ">=3.10"
+dependencies = [
+    "mcp",
+]
+
+[project.scripts]
+brain = "brain:main"
