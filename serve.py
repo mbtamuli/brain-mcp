@@ -48,8 +48,10 @@ BRAIN_WRITE_DESCRIPTION = (
     "- 'topic:<name>': domain-organized reference content (e.g. 'topic:toolchain', "
     "'topic:agent-architecture'). Searchable on demand via brain_search. Never injected at session "
     "start, so no char limit applies. Auto-creates the file if it does not exist. Use for stable "
-    "reference material that is too large or too domain-specific for MEMORY.md.\n\n"
-    "ACTIONS: add (new entry), replace (update existing via old_text substring), "
+    "reference material that is too large or too domain-specific for MEMORY.md. "
+    "Prefer multiple short §-separated entries over a single large document.\n\n"
+    "ACTIONS: add (new entry), replace (update existing: old_text locates the entry by matching "
+    "a substring within it, content replaces the whole matched entry — not a substring swap), "
     "remove (delete via old_text substring).\n\n"
     "SKIP: trivial/obvious info, things easily re-discovered, raw data dumps, temporary task state."
 )

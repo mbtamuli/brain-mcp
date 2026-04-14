@@ -68,6 +68,24 @@ def _scan_memory_content(content: str) -> Optional[str]:
     return None
 
 
+def _check_entry_line_limit(
+    content: str, target: str, force: bool
+) -> Optional[Dict[str, Any]]:
+    """Check if a topic entry exceeds the 20-line limit. Returns error dict or None."""
+    if force or not target.startswith("topic:"):
+        return None
+    line_count = content.count("\n") + 1
+    if line_count > 20:
+        return {
+            "success": False,
+            "error": (
+                f"Entry has {line_count} lines, exceeding the 20-line limit for topic entries."
+            ),
+            "hint": "Split into multiple add calls, one entry per concept",
+        }
+    return None
+
+
 # ---------------------------------------------------------------------------
 # BrainStore
 # ---------------------------------------------------------------------------
@@ -243,6 +261,10 @@ class BrainStore:
         except ValueError as e:
             return {"success": False, "error": str(e)}
 
+        limit_error = _check_entry_line_limit(content, target, force)
+        if limit_error:
+            return limit_error
+
         if not force:
             scan_error = _scan_memory_content(content)
             if scan_error:
@@ -311,6 +333,10 @@ class BrainStore:
             path = self._path_for(target)
         except ValueError as e:
             return {"success": False, "error": str(e)}
+
+        limit_error = _check_entry_line_limit(new_content, target, force)
+        if limit_error:
+            return limit_error
 
         if not force:
             scan_error = _scan_memory_content(new_content)
