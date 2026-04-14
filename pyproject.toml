@@ -12,6 +12,3 @@ py-modules = ["brain", "build", "query", "serve", "sync", "write"]
 
 [project.scripts]
 brain = "brain:main"
-
-[tool.setuptools]
-py-modules = ["brain", "serve", "write", "query", "build"]
