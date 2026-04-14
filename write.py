@@ -322,7 +322,14 @@ class BrainStore:
             matches = [(i, e) for i, e in enumerate(entries) if old_text in e]
 
             if not matches:
-                return {"success": False, "error": f"No entry matched '{old_text}'."}
+                topic_entries = [e[:80] + ("..." if len(e) > 80 else "") for e in entries]
+                return {
+                    "success": False,
+                    "error": f"No entry matched '{old_text}'.",
+                    "entry_count": len(entries),
+                    "topic_entries": topic_entries,
+                    "hint": "old_text may be stale — inspect topic_entries to find the correct substring",
+                }
 
             if len(matches) > 1:
                 unique_texts = set(e for _, e in matches)
@@ -379,7 +386,14 @@ class BrainStore:
             matches = [(i, e) for i, e in enumerate(entries) if old_text in e]
 
             if not matches:
-                return {"success": False, "error": f"No entry matched '{old_text}'."}
+                topic_entries = [e[:80] + ("..." if len(e) > 80 else "") for e in entries]
+                return {
+                    "success": False,
+                    "error": f"No entry matched '{old_text}'.",
+                    "entry_count": len(entries),
+                    "topic_entries": topic_entries,
+                    "hint": "old_text may be stale — inspect topic_entries to find the correct substring",
+                }
 
             if len(matches) > 1:
                 unique_texts = set(e for _, e in matches)
