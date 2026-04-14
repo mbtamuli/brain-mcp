@@ -69,6 +69,11 @@ BRAIN_SEARCH_DESCRIPTION = (
     "- Phrase: '\"exact phrase\"'\n"
     "- Prefix: 'observ*' matches observe, observability, etc.\n"
     "- NOT: 'logging NOT docker'\n\n"
+    "SEARCH STRATEGY:\n"
+    "- Use single topic-name terms for discovery (e.g. 'session-peers', not 'brain MCP session-peers')\n"
+    "- Avoid querying by tool names -- tool names are not stored as text in any entry\n"
+    "- On no results: split the query and try each term separately\n"
+    "- Topic names are single words or hyphenated (e.g. 'session-peers', 'toolchain')\n\n"
     "Results appear as tool output in the conversation, not in the system prompt. "
     "Search before asking the user to repeat or re-explain past context."
 )
