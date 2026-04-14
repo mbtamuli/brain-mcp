@@ -97,15 +97,17 @@ def run_mcp_server(verbose: bool = False) -> None:
     if str(_pkg_dir) not in _sys.path:
         _sys.path.insert(0, str(_pkg_dir))
 
-    from write import BrainStore
+    import asyncio
+    from write import BrainStore, BRAIN_DIR
     from query import query_brain
     from build import build_index
+    from sync import run_sync
 
     mcp = FastMCP("brain", instructions=BRAIN_GUIDANCE)
     store = BrainStore()
 
     @mcp.tool(description=BRAIN_WRITE_DESCRIPTION)
-    def brain_write(
+    async def brain_write(
         action: str,
         content: str = None,
         target: str = "memory",
@@ -141,6 +143,7 @@ def run_mcp_server(verbose: bool = False) -> None:
                 "success": False,
                 "error": f"Unknown action '{action}'. Use: add, replace, remove",
             }
+        asyncio.create_task(run_sync(BRAIN_DIR))
         return json.dumps(result, ensure_ascii=False, indent=2)
 
     BRAIN_REBUILD_DESCRIPTION = (
@@ -165,16 +168,16 @@ def run_mcp_server(verbose: bool = False) -> None:
         return json.dumps(result, ensure_ascii=False)
 
     @mcp.tool(description=BRAIN_SEARCH_DESCRIPTION)
-    def brain_search(query: str, limit: int = 10) -> str:
+    async def brain_search(query: str, limit: int = 10) -> str:
         """Search brain memory via FTS5 keyword search.
 
         Args:
             query: FTS5 query string (AND/OR/NOT/phrase/prefix supported)
             limit: Maximum results to return (default 10)
         """
-        return query_brain(query, limit=limit)
-
-    import asyncio
+        result = query_brain(query, limit=limit)
+        asyncio.create_task(run_sync(BRAIN_DIR))
+        return result
 
     async def _run():
         await mcp.run_stdio_async()
